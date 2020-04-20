@@ -25,11 +25,12 @@ class Task extends Model
             'name' => ['string' => true, 'empty' => false],
             'email' => ['email' => true, 'empty' => false],
             'task_text' => ['string' => true, 'empty' => false],
-            'status' => ['bool' => true, 'auth' => true]
+            'status' => ['integer' => true, 'auth' => true]
         ];
     }
 
     /**
+     * Вывод в шаблон
      * @return array Вывод записей, с учетом разбивки на страницы
      */
     public function getTasksWithPagination() : array
@@ -43,6 +44,12 @@ class Task extends Model
             'tasks' => $tasks,
             'sumPage' => ceil($count['c'] / $this->limit)
         ];
+    }
+
+    public function getTasks()
+    {
+        return DB::query('SELECT id, name, email, task_text, status, edited FROM task')
+            ->fetchAll();
     }
 
     public function addTask(array $data)
@@ -63,6 +70,47 @@ class Task extends Model
         }else{
             echo json_encode($this->getErrors());
             return $this->getErrors();
+        }
+    }
+
+    public function updateStatus(array $data)
+    {
+        if ($this->validate($data)) {
+            $query = 'UPDATE task SET status = :status WHERE id = :id';
+            $prepare = DB::getInstance()->getConnection()
+                ->prepare($query);
+            $res = $prepare->execute([
+                ':id' => $data['id'],
+                ':status' => $data['status']
+            ]);
+
+            echo json_encode($res);
+            return $res;
+        }else{
+            echo json_encode($this->getErrors());
+            return $this->getErrors();
+        }
+    }
+
+    public function updateText(array $data)
+    {
+        if (array_key_exists('admin', $_COOKIE)) {
+            if ($this->validate($data)) {
+                $query = 'UPDATE task SET task_text = :task_text, edited = :edited WHERE id = :id';
+                $prepare = DB::getInstance()->getConnection()
+                    ->prepare($query);
+                $res = $prepare->execute([
+                    ':id' => $data['id'],
+                    ':task_text' => $data['task_text'],
+                    ':edited' => 1
+                ]);
+
+                echo json_encode($res);
+                return $res;
+            } else {
+                echo json_encode($this->getErrors());
+                return $this->getErrors();
+            }
         }
     }
 }

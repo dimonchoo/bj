@@ -39,6 +39,8 @@ class RouterService implements Service
             $parts = preg_split('@/@', $this->uri, NULL, PREG_SPLIT_NO_EMPTY);
             if (array_key_exists(0, $parts)) {
                 $this->uriPart['controller'] = strtok($parts[0], '?');
+            }else{
+                $this->uriPart['controller'] = $this->config->getConfig('startPage');
             }
 
             if (array_key_exists(1, $parts)) {

@@ -12,7 +12,7 @@ class StupidTemplateEngine
         $this->viewsFolder = $config->getConfig('viewsFolder');
     }
 
-    public function render(string $filename, $data)
+    public function render(string $filename, $data = [])
     {
         $file = $this->viewsFolder . DIRECTORY_SEPARATOR . $filename . '.php';
         if(file_exists($file)) {

@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-6">
             <h4>Создание новой задачи</h4>
             <div>
                 <input type="text" class="form-control name" placeholder="Имя">
@@ -12,9 +12,18 @@
             </div>
             <div class="btn btn-success" id="addTask">Добавить</div>
         </div>
+        <div class="col-md-6">
+            <div class="btn btn-primary float-right">
+                <?php if (array_key_exists('admin', $_COOKIE)): ?>
+                    <a href="/user/exit" style="color: #fff;">Выйти</a>
+                <?php else: ?>
+                    <a href="/user/auth" style="color: #fff;">Авторизация</a>
+                <?php endif;?>
+            </div>
+        </div>
         <hr>
-        <div class="col-md-10">
-            <table id="example" class="display table" style="width:100%">
+        <div class="col-md-12">
+            <table id="example1" class="display table" style="width:100%">
                 <thead>
                 <tr>
                     <th scope="col">Имя пользователя</th>
@@ -23,32 +32,7 @@
                     <th scope="col">Статус</th>
                 </tr>
                 </thead>
-                <tfoot>
-                <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Extn.</th>
-                    <th>Start date</th>
-                    <th>Salary</th>
-                </tr>
-                </tfoot>
             </table>
-            <table class="table" style="height: 200px">
-                <?php foreach ($tasks as $task) : ?>
-                    <tr>
-                        <td><?= htmlspecialchars($task['name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                        <td><?= htmlspecialchars($task['email'], ENT_QUOTES, 'UTF-8'); ?></td>
-                        <td><?= htmlspecialchars($task['task_text'], ENT_QUOTES, 'UTF-8'); ?></td>
-                        <td><?= htmlspecialchars($task['status'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-            <div class="paginator">
-                <?php for ($i = 1, $k = 0; $i <= $sumPage; $i++, $k++): ?>
-                    <a class="btn btn-primary" href="/index?page=<?= $k ?>"><?= $i ?></a>
-                <?php endfor ?>
-            </div>
         </div>
     </div>
 </div>
